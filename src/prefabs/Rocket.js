@@ -1,4 +1,4 @@
-const { Phaser } = require("../../lib/phaser");
+//const { Phaser } = require("../../lib/phaser");
 
 // Rocket prefab
 class Rocket extends Phaser.GameObjects.Sprite {
@@ -29,5 +29,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.isFiring=false;
             this.y=game.config.height-borderUISize-borderPadding;
         }
+    }
+
+    reset(){
+        this.isFiring=false;
+        this.y=game.config.height-borderUISize-borderPadding;
     }
   }
