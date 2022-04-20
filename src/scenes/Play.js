@@ -33,6 +33,7 @@ this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borde
   keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
   keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
   keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+  keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
   // animation config
 this.anims.create({
     key: 'explode',
@@ -55,23 +56,49 @@ this.p1Score = 0;
     fixedWidth: 100
   }
   this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+  this.scoreRight = this.add.text(game.config.width - 100-2*(borderUISize - borderPadding), borderUISize + borderPadding*2, game.settings.highScore, scoreConfig);
   // 60-second play clock
     this.gameOver = false;
     scoreConfig.fixedWidth = 0;
     this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-    this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+      this.clock = this.time.delayedCall(game.settings.gameTimer2, () => {
+      this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
+      if(game.settings.highScore!=0){
+        if(game.settings.highScore>this.p1Score){
+          this.add.text(game.config.width/2, game.config.height/2 + 64, 'Player 1 Wins!', scoreConfig).setOrigin(0.5);
+          this.add.text(game.config.width/2, game.config.height/2 + 96, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+        }else if(game.settings.highScore<this.p1Score){
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Player 2 Wins!', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 96, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+        }else{
+          this.add.text(game.config.width/2, game.config.height/2 + 64, 'DRAW!', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 96, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+        }
+      }else{
+    
     this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+    this.add.text(game.config.width/2, game.config.height/2 + 96, 'Press (T) for player 2', scoreConfig).setOrigin(0.5);
+      }
     this.gameOver=true;
+}, null, this);
 }, null, this);
 
       }
     update() {
         this.starfield.tilePositionX -= 4;
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+          game.settings.highScore=0;
             this.scene.start("menuScene");
         }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyT)&&game.settings.highScore==0) {
+          game.settings.highScore=this.p1Score;
+          game.settings.gameTimer2=0;
+          this.scene.restart();
+      }
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
-            this.scene.restart();
+          game.settings.highScore=0;
+          game.settings.gameTimer2=0;
+          this.scene.restart();
         }
         if (!this.gameOver) {      
         this.p1Rocket.update();
@@ -81,15 +108,18 @@ this.p1Score = 0;
         // check collisions
 if(this.checkCollision(this.p1Rocket, this.ship03)) {
     this.p1Rocket.reset();
-    this.shipExplode(this.ship03);   
+    this.shipExplode(this.ship03);
+    game.settings.gameTimer2+= 1000;   
   }
   if (this.checkCollision(this.p1Rocket, this.ship02)) {
     this.p1Rocket.reset();
     this.shipExplode(this.ship02);
+    game.settings.gameTimer2+= 1000;
   }
   if (this.checkCollision(this.p1Rocket, this.ship01)) {
     this.p1Rocket.reset();
     this.shipExplode(this.ship01);
+    game.settings.gameTimer2+= 1000;  
   }
       }
       
