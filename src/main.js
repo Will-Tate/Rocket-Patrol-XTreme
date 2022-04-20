@@ -10,4 +10,4 @@ let config = {
 let borderPadding = borderUISize / 3;
 let highScore=0;
 // reserve keyboard vars
-let keyF, keyR, keyLEFT, keyRIGHT, keyT;
+let keyF, keyR, keyLEFT, keyRIGHT, keyT, keyUP;

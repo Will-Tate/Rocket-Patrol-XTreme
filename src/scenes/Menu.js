@@ -33,6 +33,7 @@ class Menu extends Phaser.Scene {
           // define keys
           keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
   keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+  keyUP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
   keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
       }
 
@@ -40,7 +41,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyLEFT)) {
           // easy mode
           game.settings = {
-            spaceshipSpeed: 3,
+            spaceshipSpeed: 5,
             gameTimer: 60000,
             gameTimer2: 0,
             //highScore: 0,
@@ -52,7 +53,7 @@ class Menu extends Phaser.Scene {
         if (Phaser.Input.Keyboard.JustDown(keyRIGHT)) {
           // hard mode
           game.settings = {
-            spaceshipSpeed: 4,
+            spaceshipSpeed: 7,
             gameTimer: 45000,
             gameTimer2: 0,
             oldScore: 0,
